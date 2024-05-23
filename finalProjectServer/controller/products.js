@@ -56,9 +56,11 @@ async function postProduct(item) {
             .input('UnitsOnOrder', sql.NVarChar, item.UnitsOnOrder)
             .input('ReorderLevel', sql.NVarChar, item.ReorderLevel)
             .input('Discontinued', sql.NVarChar, item.Discontinued)
+            .input('UserID', sql.NVarChar, item.UserID)
+            .input('PicturePath', sql.NVarChar, item.PicturePath)
             .output('name', sql.NVarChar, item.ProductName)  //output name เป็น type NVarChar
             .output('code', sql.NVarChar, 'success')  //output code เป็น type NVarChar 'success'
-            .query('INSERT INTO Products (ProductName, SupplierID, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued) VALUES (@ProductName, @SupplierID, @CategoryID, @QuantityPerUnit, @UnitPrice, @UnitsInStock, @UnitsOnOrder, @ReorderLevel, @Discontinued)') // ส่ง Query insert ไปที่ตาราง Shippers      }).then(result => {// ผลลัพธ์ result
+            .query('INSERT INTO Products (ProductName, SupplierID, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued, UserID, PicturePath) VALUES (@ProductName, @SupplierID, @CategoryID, @QuantityPerUnit, @UnitPrice, @UnitsInStock, @UnitsOnOrder, @ReorderLevel, @Discontinued, @UserID, @PicturePath)') // ส่ง Query insert ไปที่ตาราง Shippers      }).then(result => {// ผลลัพธ์ result
         }).then(result => {// ผลลัพธ์ result
             // console.log(result)
             return result.output  // return data result
@@ -88,9 +90,11 @@ async function putProduct(item, id) {
             .input('UnitsOnOrder', sql.NVarChar, item.UnitsOnOrder)
             .input('ReorderLevel', sql.NVarChar, item.ReorderLevel)
             .input('Discontinued', sql.NVarChar, item.Discontinued)
+            .input('UserID', sql.NVarChar, item.UserID)
+            .input('PicturePath', sql.NVarChar, item.PicturePath)
             .output('name', sql.NVarChar, item.ProductName)  //output name เป็น type NVarChar
             .output('code', sql.NVarChar, 'success')   //output code เป็น type NVarChar 'success'
-            .query('UPDATE Products SET ProductName=@ProductName, SupplierID=@SupplierID, CategoryID=@CategoryID, QuantityPerUnit=@QuantityPerUnit, UnitPrice=@UnitPrice, UnitsInStock=@UnitsInStock, UnitsOnOrder=@UnitsOnOrder, ReorderLevel=@ReorderLevel, Discontinued=@Discontinued WHERE ProductID=@ProductID') // ส่ง Query UPDATE ไปที่ตาราง Shippers ตามที่ shipperid ที่ได้รับมา     }).then(result => {// ผลลัพธ์ result
+            .query('UPDATE Products SET ProductName=@ProductName, SupplierID=@SupplierID, CategoryID=@CategoryID, QuantityPerUnit=@QuantityPerUnit, UnitPrice=@UnitPrice, UnitsInStock=@UnitsInStock, UnitsOnOrder=@UnitsOnOrder, ReorderLevel=@ReorderLevel, Discontinued=@Discontinued, UserID=@UserID, PicturePath=@PicturePath WHERE ProductID=@ProductID') // ส่ง Query UPDATE ไปที่ตาราง Shippers ตามที่ shipperid ที่ได้รับมา     }).then(result => {// ผลลัพธ์ result
         }).then(result => {// ผลลัพธ์ result
             // console.log(result)
             return result.output  // return data result

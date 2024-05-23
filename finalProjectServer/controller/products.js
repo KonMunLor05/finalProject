@@ -126,4 +126,53 @@ async function deleteProduct(id) {
         console.log(error);
     }
 }
-module.exports = { getProduct:getProduct, getProductByID:getProductByID, postProduct:postProduct, putProduct:putProduct, deleteProduct:deleteProduct };
+
+async function auth(id,pwd) {
+    try {// ถ้าเกิด error จะเข้า catch
+    // Query
+    let data = await sql.connect(config) // sql connect to database
+        .then(pool => {
+            return pool.request()
+            .input('UserID', sql.NVarChar, id)  //input ShipperID เป็น type Int
+            .input('Pwd', sql.NVarChar, pwd)  //output id เป็น type Int
+            .output('id', sql.NVarChar, id)  
+            .output('code', sql.NVarChar, 'success')  //output code เป็น type NVarChar 'success'
+            .query('SELECT * from [User] WHERE UserID=@UserID AND Pwd=@Pwd') 
+        }).then(result => {// ผลลัพธ์ result
+             console.log(result)
+            return result.output  // return data result
+        }).catch(err => {  // ถ้าเกิด error จะเข้า catch
+            return err;  // return error
+        });
+    return data;  // return ค่ากลับ
+    }
+    catch (error){
+        console.log(error);
+    }
+}
+
+async function signUp(item) {
+    try {// ถ้าเกิด error จะเข้า catch
+    // Query
+    let data = await sql.connect(config) // sql connect to database
+        .then(pool => {
+            return pool.request()
+            .input('UserID', sql.NVarChar, item.UserID)  //input ShipperID เป็น type Int
+            .input('Pwd', sql.NVarChar, item.Pwd) 
+            .input('Username', sql.NVarChar, item.Username) 
+            .output('name', sql.NVarChar, item.Username) 
+            .output('code', sql.NVarChar, 'success')  //output code เป็น type NVarChar 'success'
+            .query('INSERT INTO [User] (UserID, Pwd, Username) VALUES (@UserID,@Pwd,@Username)') // ส่ง Query DELETE ไปที่ตาราง Shippers ตามที่ได้รับshipperidมา
+        }).then(result => {// ผลลัพธ์ result
+            // console.log(result)
+            return result.output  // return data result
+        }).catch(err => {  // ถ้าเกิด error จะเข้า catch
+            return err;  // return error
+        });
+    return data;  // return ค่ากลับ
+    }
+    catch (error){
+        console.log(error);
+    }
+}
+module.exports = { getProduct:getProduct, getProductByID:getProductByID, postProduct:postProduct, putProduct:putProduct, deleteProduct:deleteProduct, auth:auth, signUp:signUp};

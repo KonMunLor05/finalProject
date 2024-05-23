@@ -30,6 +30,16 @@ router.route('/product/:id').get((req, res)=>{    // ส่ง parameter id
         console.log(err);
     });
     })
+router.route('/product/user/:id').get((req, res)=>{    // ส่ง parameter id
+    Db.getProductByID(req.params.id).then((data)=>{  // เรียกใช้ function getShipByID(id) / req.params.id ดึงค่า parameter id
+        res.status(200).json({data:data, message: 'get id data success'});  // ส่ง http code 200 และแสดง data
+                                // message ในรูปแบบ json
+    }).catch(err=>{
+        res.status(500).send({error: err, message:'Server Error '}) // ถ้า error จะส่ง http code 500
+                            // และแสดง err, message ในรูปแบบ json
+        console.log(err);
+    });
+    })
     //http://localhost:8080/api/ship
     router.route('/product').post((req, res)=>{
         let product = { ...req.body } //ส่ง req.body เป็นข้อมูล json เข้าไปยังตัวแปร ship

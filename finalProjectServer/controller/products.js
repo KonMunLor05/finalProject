@@ -61,6 +61,26 @@ async function getProductByUserID(id) {  //รับ Parameter id
         console.log(error);
     }
 }
+async function getCategoryByID(id) {  //รับ Parameter id
+    try {// ถ้าเกิด error จะเข้า catch
+    // Query
+    let data = await sql.connect(config) // sql connect to database
+        .then(pool => {
+            return pool.request()
+            .input('CategoryID', sql.Int, id)  // input id เข้าไปในตัวแปริ  ShipperID
+            .query('SELECT * FROM Categories WHERE CategoryID = @CategoryID') // ส่ง Query select ด้วยการ Where ShipperID
+        }).then(result => {// ผลลัพธ์ result
+            // console.log(result)
+            return result.recordsets  // return data result
+        }).catch(err => {  // ถ้าเกิด error จะเข้า catch
+            return err;  // return error
+        });
+    return data;  // return ค่ากลับ
+    }
+    catch (error){
+        console.log(error);
+    }
+}
 
 async function postProduct(item) {
     try {// ถ้าเกิด error จะเข้า catch
@@ -200,4 +220,4 @@ async function signUp(item) {
         console.log(error);
     }
 }
-module.exports = { getProduct:getProduct, getProductByID:getProductByID, postProduct:postProduct, putProduct:putProduct, deleteProduct:deleteProduct, auth:auth, signUp:signUp, getProductByUserID:getProductByUserID};
+module.exports = { getProduct:getProduct, getProductByID:getProductByID, postProduct:postProduct, putProduct:putProduct, deleteProduct:deleteProduct, auth:auth, signUp:signUp, getProductByUserID:getProductByUserID, getCategoryByID:getCategoryByID};

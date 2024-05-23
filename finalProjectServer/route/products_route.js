@@ -88,6 +88,36 @@ router.route('/product/:id').delete((req, res)=>{
         console.log(err);
     });
     })
+router.route('/auth/:id/:pwd').get((req, res)=>{
+    Db.auth(req.params.id, req.params.pwd).then((data)=>{    // เรียกใช้ function getShip() และ return data กลับมา 
+        // console.log(data);      
+        res.status(200).json({data:data, message: 'get data success'});  // ส่ง http code 200 และแสดง data
+                                // message ในรูปแบบ json
+    }).catch(err=>{
+        res.status(500).send({error: err, message:'Server Error '}) // ถ้า error จะส่ง http code 500
+                            // และแสดง err, message ในรูปแบบ json
+        console.log(err);
+    });
+    })
+router.route('/signUp').post((req, res)=>{
+    let User = { ...req.body } //ส่ง req.body เป็นข้อมูล json เข้าไปยังตัวแปร ship
+    Db.signUp(User).then((data)=>{    // เรียกใช้ function postShip() สง ship และ return data กลับมา 
+        if(data.code == 'success') //return data.codde กลับมาเป็น success
+        {
+            res.status(200).json({ data: data, message: 'new data success' });
+        } 
+        else //return data เป็น error
+        {
+            res.status(400).send({ error: data, message:'Bad Request' }) //จะส่ง http code 400 และแสดง error, message ในรูปแบบ json
+        }
+        // console.log(data);      
+    }).catch(err=>{
+        res.status(500).send({error: err, message:'Server Error '}) // ถ้า error จะส่ง http code 500
+                            // และแสดง err, message ในรูปแบบ json
+        console.log(err);
+    });
+    })
+    
 
     module.exports = router;   
 

@@ -1,5 +1,33 @@
 const config = require('../sqlconfig');  //ดึงข้อมูล connection จาก sqlconfig.js
 const sql = require('mssql');   // ใช้ module sql
+const multer = require('multer');
+const path = require('path');
+
+const storage = multer.diskStorage({
+    destination: './public/uploads/', // Directory where files will be saved
+    filename: (req, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+    }
+  });
+  
+  // Initialize upload
+  const upload = multer({
+    storage: storage,
+    limits: { fileSize: 1000000 } // 1MB limit
+  }).single('image'); // Expect a single file named 'image'
+  
+  exports.uploadImage = (req, res) => {
+    upload(req, res, async (err) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+  
+      const filePath = `/uploads/${req.file.filename}`;
+  
+      res.status(200).json({ message: 'File uploaded successfully', path: filePath });
+    });
+  };
+  
 
 async function getProduct() {
     try {// ถ้าเกิด error จะเข้า catch
@@ -185,7 +213,7 @@ async function auth(id,pwd) {
             .query('SELECT * from [User] WHERE UserID=@UserID AND Pwd=@Pwd') 
         }).then(result => {// ผลลัพธ์ result
              console.log(result)
-            return result.output  // return data result
+            return result.recordsets  // return data result
         }).catch(err => {  // ถ้าเกิด error จะเข้า catch
             return err;  // return error
         });

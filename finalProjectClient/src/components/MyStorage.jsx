@@ -1,62 +1,34 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
+import Axios from 'axios'
 
 function MyStorage() {
 
-    const [products] = useState([
-        {
-          id: 1,
-          name: 'Product 1',
-          image: 'product1.jpg',
-          price: 10.99
-        },
-        {
-          id: 2,
-          name: 'Product 2',
-          image: 'product2.jpg',
-          price: 19.99
-        },
-        {
-          id: 3,
-          name: 'Product 3',
-          image: 'product3.jpg',
-          price: 14.99
-        },
-        {
-          id: 4,
-          name: 'Product 3',
-          image: 'product3.jpg',
-          price: 14.99
-        },
-        {
-          id: 5,
-          name: 'Product 3',
-          image: 'product3.jpg',
-          price: 14.99
-        },
-        {
-          id: 6,
-          name: 'Product 3',
-          image: 'product3.jpg',
-          price: 14.99
-        },
-        {
-          id: 7,
-          name: 'Product 3',
-          image: 'product3.jpg',
-          price: 14.99
-        }
+  const [count, setCount] = useState(0);
+  const [productList, setProductList] = useState([]);
 
-      ]);
-
+  const getProduct = () => {
+    console.log('Fetching product data...');
+    Axios.get('http://localhost:8080/api/product')
+      .then((response) => {
+        console.log('Product data received:', response.data.data);
+        setProductList(response.data.data); // Assuming response.data is an array of product objects
+      })
+      .catch((error) => {
+        console.error('Error fetching product data:', error);
+      });
+  };
+  useEffect(() => {
+    getProduct();
+  }, []);
 
   return (
     
     <div className="storagebox">
-        {products.map(product => (
-          <div key={product.id} className="product">
-            <p>{product.name}</p>
-            <p>${product.price}</p>
+        {productList.map((product) => (
+          <div key={product.ProductID} className="product">
+            <p>{product.ProductName}</p>
+            <p>${product.UnitPrice}</p>
             
           </div>
         ))}

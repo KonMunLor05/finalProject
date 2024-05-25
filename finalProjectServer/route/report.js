@@ -1,6 +1,6 @@
 const express = require('express');
 const route = express.Router();
-const Db = require('../controller/shippers');
+const Db = require('../controller/products');
 const router = require('./myroute');
 //เรียกใช้ package @jsreport/nodejs-client ที่ลิ้งค์กับ report server (erl, username, password)
 const client = require('@jsreport/nodejs-client')("http://localhost:5488","admin","mypassword")
@@ -10,13 +10,13 @@ router.use((req, res, next)=>{
     next();
 });
 //http://localhost:8080/report/ship
-router.get('/ship', (req, res, next) => {
+router.get('/product', (req, res, next) => {
     //Get data shippers ทั้งหมด
-    Db.getShip().then((data)=>{
+    Db.getProduct().then((data)=>{
         //เปิด report
         client.render({
             template: {
-                name: 'shippers-report', // ชื่อ report
+                name: 'products-report', // ชื่อ report
                 recipe: 'chrome-pdf', //เปิดเป็น chrome-pdf หรือแปลงเป็นformat html ดูก็ได้
                 engine: 'handlebars'
             },

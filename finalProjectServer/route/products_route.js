@@ -31,8 +31,19 @@ router.route('/product/:id').get((req, res)=>{    // ส่ง parameter id
     });
     })
 router.route('/product/user/:id').get((req, res)=>{    // ส่ง parameter id
-    Db.getProductByID(req.params.id).then((data)=>{  // เรียกใช้ function getShipByID(id) / req.params.id ดึงค่า parameter id
+    Db.getProductByUserID(req.params.id).then((data)=>{  // เรียกใช้ function getShipByID(id) / req.params.id ดึงค่า parameter id
         res.status(200).json({data:data, message: 'get id data success'});  // ส่ง http code 200 และแสดง data
+                                // message ในรูปแบบ json
+    }).catch(err=>{
+        res.status(500).send({error: err, message:'Server Error '}) // ถ้า error จะส่ง http code 500
+                            // และแสดง err, message ในรูปแบบ json
+        console.log(err);
+    });
+    })
+router.route('/category/:id').get((req, res)=>{
+    Db.getCategoryByID(req.params.id).then((data)=>{    // เรียกใช้ function getShip() และ return data กลับมา 
+        // console.log(data);      
+        res.status(200).json({data:data, message: 'get data success'});  // ส่ง http code 200 และแสดง data
                                 // message ในรูปแบบ json
     }).catch(err=>{
         res.status(500).send({error: err, message:'Server Error '}) // ถ้า error จะส่ง http code 500

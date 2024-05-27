@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import NotHaveImage from './image/notHave.png';
 
-function MyStorage({ setActiveDetail }) {
+function OwnerStore({ setActiveDetail }) {
   const [productList, setProductList] = useState([]);
 
   useEffect(() => {
-    getProduct();
+    const storedUID = sessionStorage.getItem('userID');
+    getProductUser(storedUID);
   }, []);
 
-  const getProduct = () => {
-    Axios.get('http://localhost:8080/api/product')
+  const getProductUser = (UID) => {
+    Axios.get(`http://localhost:8080/api/product/User/${UID}`)
       .then((response) => {
         setProductList(response.data.data[0]);
       })
@@ -45,4 +46,4 @@ function MyStorage({ setActiveDetail }) {
   );
 }
 
-export default MyStorage;
+export default OwnerStore;

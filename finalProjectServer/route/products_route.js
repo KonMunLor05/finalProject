@@ -1,5 +1,7 @@
 const express = require('express')    //ใช้ module express
 const router = express.Router();  //ใช้ function router ของ express
+const multer = require('multer');
+const path = require('path');
 const Db = require('../controller/products') //import shipper ในตัวแปร Db
 
 // middleware
@@ -7,6 +9,18 @@ router.use((req, res,next)=>{
     console.log('middleware');
     next();
 });
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/'); // Specify the folder to store uploaded files
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage: storage });
+
+
 //http://localhost:8080/api/ship
 router.route('/product').get((req, res)=>{
 Db.getProduct().then((data)=>{    // เรียกใช้ function getShip() และ return data กลับมา 
@@ -52,45 +66,38 @@ router.route('/category/:id').get((req, res)=>{
     });
     })
     //http://localhost:8080/api/ship
-    router.route('/product').post((req, res)=>{
-        let product = { ...req.body } //ส่ง req.body เป็นข้อมูล json เข้าไปยังตัวแปร ship
-        Db.postProduct(product).then((data)=>{    // เรียกใช้ function postShip() สง ship และ return data กลับมา 
-            if(data.code == 'success') //return data.codde กลับมาเป็น success
-            {
-              res.status(200).json({ data: data, message: 'new data success' });
-            } 
-            else //return data เป็น error
-            {
-              res.status(400).send({ error: data, message:'Bad Request' }) //จะส่ง http code 400 และแสดง error, message ในรูปแบบ json
-            }
-            // console.log(data);      
-        }).catch(err=>{
-            res.status(500).send({error: err, message:'Server Error '}) // ถ้า error จะส่ง http code 500
-                                // และแสดง err, message ในรูปแบบ json
-            console.log(err);
-        });
-        })
+router.route('/product').post(upload.single('productImage'), (req, res) => {
+    let product = { ...req.body, PicturePath: req.file ? req.file.path : null }; // Include the file path in product data
 
-//http://localhost:8080/api/ship
-router.route('/product/:id').put((req, res)=>{
-    let product = { ...req.body } //ส่ง req.body เป็นข้อมูล json เข้าไปยังตัวแปร ship
-    Db.putProduct(product, req.params.id).then((data)=>{    // เรียกใช้ function putShip() สง ship และ return data กลับมา 
-        if(data.code == 'success') //return data.codde กลับมาเป็น success
-        {
-          res.status(200).json({ data: data, message: 'update data success' });
-        } 
-        else //return data เป็น error
-        {
-          res.status(400).send({ error: data, message:'Bad Request' }) //จะส่ง http code 400 และแสดง error, message ในรูปแบบ json
+    Db.postProduct(product).then((data) => {
+        if (data.code === 'success') {
+            res.status(200).json({ data: data, message: 'new data success' });
+        } else {
+            res.status(400).send({ error: data, message: 'Bad Request' });
         }
-        // console.log(data);      
-    }).catch(err=>{
-        res.status(500).send({error: err, message:'Server Error '}) // ถ้า error จะส่ง http code 500
-                            // และแสดง err, message ในรูปแบบ json
+    }).catch(err => {
+        res.status(500).send({ error: err, message: 'Server Error' });
         console.log(err);
     });
-    })
+});
 
+
+//http://localhost:8080/api/ship
+router.route('/product/:id').put(upload.single('productImage'), (req, res) => {
+    let product = { ...req.body, PicturePath: req.file ? req.file.path : null }; // Include the file path in product data
+
+    Db.putProduct(product,req.params.id).then((data) => {
+        if (data.code === 'success') {
+            res.status(200).json({ data: data, message: 'new data success' });
+        } else {
+            res.status(400).send({ error: data, message: 'Bad Request' });
+        }
+    }).catch(err => {
+        res.status(500).send({ error: err, message: 'Server Error' });
+        console.log(err);
+    });
+});
+    
 //http://localhost:8080/api/ship
 router.route('/product/:id').delete((req, res)=>{
     Db.deleteProduct(req.params.id).then((data)=>{    // เรียกใช้ function putShip() สง ship และ return data กลับมา 

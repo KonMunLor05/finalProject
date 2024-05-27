@@ -6,6 +6,7 @@ import Login from './components/Auth';
 import Add from './components/AddProduct';
 import Update from './components/UpdateProduct';
 import DetailProduct from './components/DetailProduct';
+import OwnerStore from './components/OwnerStore';
 import './App.css';
 
 function App() {
@@ -14,12 +15,17 @@ function App() {
   const [activeComponent, setActiveComponent] = useState('Add');
   const [activeDetail, setActiveDetail] = useState('All');
   const [activeDetailID, setActiveDetailID] = useState('');
+  const [storeList, setStoreList] = useState('');
+  const [UID, setUID] = useState('');
+
 
   useEffect(() => {
     const storedUsername = sessionStorage.getItem('username');
+    const storedUID = sessionStorage.getItem('userID');
     if (storedUsername) {
       setUsername(storedUsername);
       setIsAuthenticated(true);
+      setUID(storedUID);
     } else {
       getUser();
     }
@@ -61,6 +67,14 @@ function App() {
     setActiveDetailID('');
   };
 
+  const handleStore = () => {
+    setStoreList('');
+  };
+  const handleStorage = () => {
+    setStoreList(UID);
+  };
+
+
   return (
     <>
       {isAuthenticated ? (
@@ -70,7 +84,10 @@ function App() {
           {activeComponent === 'Add' && <Add />}
           {activeComponent === 'Update' && <Update />}
           <h1>Storage</h1>
-          {activeDetail === 'All' && <MyStorage setActiveDetail={handleProductClick} />}
+          {activeDetail === 'All' &&<button onClick={handleStore}>Store</button>}
+          {activeDetail === 'All' &&<button onClick={handleStorage}>MyStorage</button>}
+          {activeDetail === 'All' && storeList == ''&&<MyStorage setActiveDetail={handleProductClick} />}
+          {activeDetail === 'All' && storeList!= '' &&<OwnerStore setActiveDetail={handleProductClick} />}
           {activeDetail === 'Detail' && <DetailProduct productID={activeDetailID} onReturn={handleReturn} />}
         </>
       ) : (

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
 
-const AddProduct = () => {
+const UpdateProduct = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [productDetails, setProductDetails] = useState({
     ProductName: '',
@@ -25,7 +25,7 @@ const AddProduct = () => {
     setProductDetails({ ...productDetails, [name]: value });
   };
 
-  const handleAddProduct = () => {
+  const handleUpdateProduct = () => {
     const formData = new FormData();
     formData.append('productImage', selectedFile);
 
@@ -33,7 +33,7 @@ const AddProduct = () => {
       formData.append(key, productDetails[key]);
     }
 
-    Axios.post('http://localhost:8080/api/product', formData)
+    Axios.put('http://localhost:8080/api/product/', formData)
       .then((response) => {
         console.log('Product added successfully:', response.data);
       })
@@ -44,7 +44,7 @@ const AddProduct = () => {
 
   return (
     <div>
-      <h2>Add Product</h2>
+      <h2>Update Product</h2>
       <input type="file" onChange={handleFileChange} />
       <input type="text" name="ProductName" placeholder="Product Name" onChange={handleInputChange} />
       <input type="text" name="SupplierID" placeholder="Supplier ID" onChange={handleInputChange} />
@@ -56,9 +56,9 @@ const AddProduct = () => {
       <input type="text" name="ReorderLevel" placeholder="Reorder Level" onChange={handleInputChange} />
       <input type="text" name="Discontinued" placeholder="Discontinued" onChange={handleInputChange} />
       <input type="text" name="UserID" placeholder="User ID" onChange={handleInputChange} />
-      <button onClick={handleAddProduct}>Add Product</button>
+      <button onClick={handleUpdateProduct}>Update Product</button>
     </div>
   );
 };
 
-export default AddProduct;
+export default UpdateProduct;

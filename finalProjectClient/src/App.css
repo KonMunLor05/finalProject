@@ -17,15 +17,35 @@
   padding: 3%;
   background-color: #3c3c3c;
   box-sizing: border-box; /* Ensure padding is included in the element's total width */
+  
+}
+
+.storageboxDetail {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+  justify-content: center;
+  margin-left: 0; 
+  margin-right: 0; 
+  padding: 3%;
+  background-color: #3c3c3c;
+  box-sizing: border-box; /* Ensure padding is included in the element's total width */
 }
 
 
 .product {
   width: 100%;
-  max-width: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 2%;
+  background-color: white;
+  border-style: solid;
+  border-width: 5px;
+  border-color: black;
+}
+.product:hover{
+  background-color: #C7C7C7;
 }
 
 

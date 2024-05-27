@@ -1,73 +1,47 @@
-import React from 'react'
-import { useState,useEffect } from 'react'
-import Axios from 'axios'
-import HaveImage from './image/Have.png';
+import React, { useState, useEffect } from 'react';
+import Axios from 'axios';
 import NotHaveImage from './image/notHave.png';
 
-function MyStorage() {
-
-  const [count, setCount] = useState(0);
-  const [productList, setProductList] = useState([]);
-
-  /*
-  ดึงของตัวเอง
-  const [uid, setUID] = useState('');
+function MyStorage({ setActiveDetail }) {
   const [productList, setProductList] = useState([]);
 
   useEffect(() => {
-    const storedUID = sessionStorage.getItem('userID');
-    if (storedUID) {
-      setUID(storedUID);
-      getProduct(storedUID);
-    }
+    getProduct();
   }, []);
 
-  const getProduct = (userID) => {
-    console.log('Fetching product data...');
-    Axios.get(`http://localhost:8080/api/product/User/${userID}`)
-      .then((response) => {
-        console.log('Product data received:', response.data.data[0]);
-        setProductList(response.data.data[0]); // Assuming response.data.data[0] is the correct structure
-      })
-      .catch((error) => {
-        console.error('Error fetching product data:', error);
-      });
-  }; */
   const getProduct = () => {
-    console.log('Fetching product data...');
     Axios.get('http://localhost:8080/api/product')
       .then((response) => {
-        console.log('Product data received:', response.data.data[0]);
-        setProductList(response.data.data[0]); // Assuming response.data is an array of product objects
+        setProductList(response.data.data[0]);
       })
       .catch((error) => {
         console.error('Error fetching product data:', error);
       });
   };
-  useEffect(() => {
-    getProduct();
-  }, []);
+
+  const handleProductClick = (productID) => {
+    setActiveDetail(productID);
+  };
 
   return (
-    
     <div className="storagebox">
-        {productList.map((product) => (
-          <div key={product.ProductID} className="product">
-            {
-            product.PicturePath ? (
-              <p><img width="100%" src={HaveImage} /></p>
-            ) : (
-              <p><img width="100%" src={NotHaveImage} /></p>
-            )}
-            {console.log(product.PicturePath)}
-            <p>{product.ProductName}</p>
-            <p>${product.UnitPrice}</p>
-            
-          </div>
-        ))}
+      {productList.map((product) => (
+        <div
+          key={product.ProductID}
+          className="product"
+          onClick={() => handleProductClick(product.ProductID)}
+        >
+          {product.PicturePath ? (
+            <img width="75%" src={`http://localhost:8080/${product.PicturePath}`} alt="Product" />
+          ) : (
+            <img width="75%" src={NotHaveImage} alt="No Product" />
+          )}
+          <p>{product.ProductName}</p>
+          <p>${product.UnitPrice}</p>
+        </div>
+      ))}
     </div>
-    
-  )
+  );
 }
 
-export default MyStorage
+export default MyStorage;

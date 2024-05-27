@@ -1,15 +1,19 @@
-// src/App.jsx
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import MyStorage from './components/MyStorage';
 import MyMenuBar from './components/MyMenuBar';
 import Login from './components/Auth';
 import Add from './components/AddProduct';
+import Update from './components/UpdateProduct';
+import DetailProduct from './components/DetailProduct';
 import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState('');
+  const [activeComponent, setActiveComponent] = useState('Add');
+  const [activeDetail, setActiveDetail] = useState('All');
+  const [activeDetailID, setActiveDetailID] = useState('');
 
   useEffect(() => {
     const storedUsername = sessionStorage.getItem('username');
@@ -47,14 +51,27 @@ function App() {
     sessionStorage.removeItem('username');
   };
 
+  const handleProductClick = (productID) => {
+    setActiveDetail('Detail');
+    setActiveDetailID(productID);
+  };
+
+  const handleReturn = () => {
+    setActiveDetail('All');
+    setActiveDetailID('');
+  };
+
   return (
     <>
       {isAuthenticated ? (
         <>
-          <MyMenuBar onLogout={handleLogout} />
+          <MyMenuBar onLogout={handleLogout} setActiveComponent={setActiveComponent} />
           <h1>Welcome, {username}!</h1>
+          {activeComponent === 'Add' && <Add />}
+          {activeComponent === 'Update' && <Update />}
           <h1>Storage</h1>
-          <MyStorage />
+          {activeDetail === 'All' && <MyStorage setActiveDetail={handleProductClick} />}
+          {activeDetail === 'Detail' && <DetailProduct productID={activeDetailID} onReturn={handleReturn} />}
         </>
       ) : (
         <Login onLogin={handleLogin} />

@@ -1,8 +1,6 @@
-import React from 'react'
-import { useState,useEffect  } from 'react'
-import Axios from 'axios'
+import React, { useState, useEffect } from 'react';
 
-function MyMenuBar({ onLogout }) {
+function MyMenuBar({ onLogout, setActiveComponent }) {
   const [username, setUsername] = useState('');
   const [userID, setUID] = useState('');
 
@@ -11,7 +9,7 @@ function MyMenuBar({ onLogout }) {
     if (storedUsername) {
       setUsername(storedUsername);
     }
-    const uid = sessionStorage.getItem('userID')
+    const uid = sessionStorage.getItem('userID');
     if (uid) {
       setUID(uid);
     }
@@ -24,11 +22,21 @@ function MyMenuBar({ onLogout }) {
     onLogout();
   };
 
+  const handleAdd = () => {
+    setActiveComponent('Add');
+  };
+
+  const handleUpdate = () => {
+    setActiveComponent('Update');
+  };
+
   return (
     <div className="menubox">
       <div className="username">
-        <p>{username}{userID}</p>
+        <p>{username}</p>
       </div>
+      <button onClick={handleAdd}>Add</button>
+      <button onClick={handleUpdate}>Update</button>
       <button onClick={handleLogout}>Logout</button>
     </div>
   );

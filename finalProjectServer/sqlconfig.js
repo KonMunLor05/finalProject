@@ -1,9 +1,10 @@
 const sql = require("mssql");
 
 const config = {
-    server: 'DESKTOP-O2O971Q\\SQLEXPRESS',
+    server: 'database-1.cdao0oyuqx2h.us-east-1.rds.amazonaws.com',
     database: 'Northwind',
-    user: 'sa',
+    user: 'admin',
+    port: 1433,
     password: '123456789',
     encrypt: false,
     trustServerCertificate: false, // เพิ่มค่า trustServerCertificate เพื่อปิดการใช้งานใบรับรองของเซิร์ฟเวอร์

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import NotHaveImage from './image/notHave.png';
+import API from './api';
 
 function DetailProduct({ productID, onReturn }) {
   const [product, setProduct] = useState({});
@@ -21,7 +22,7 @@ function DetailProduct({ productID, onReturn }) {
   }, [categoryID]);
 
   const getProductID = (ProductID) => {
-    Axios.get(`http://localhost:8080/api/product/${ProductID}`)
+    API.get(`/api/product/${ProductID}`)
       .then((response) => {
         const productData = response.data.data[0][0];
         setProduct(productData);
@@ -34,8 +35,7 @@ function DetailProduct({ productID, onReturn }) {
 
   const getCategory = (categoryID) => {
     console.log(categoryID);
-    console.log(`http://localhost:8080/api/category/${categoryID}`);
-    Axios.get(`http://localhost:8080/api/category/${categoryID}`)
+    API.get(`/api/category/${categoryID}`)
       .then((response) => {
         setCategoryName(response.data.data[0][0].CategoryName);
       })

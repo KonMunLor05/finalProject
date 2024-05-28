@@ -1,5 +1,6 @@
 import React, { useState,useEffect} from 'react';
 import Axios from 'axios';
+import API from './api';
 
 const AddProduct = () => {
 
@@ -35,7 +36,7 @@ const AddProduct = () => {
       formData.append(key, productDetails[key]);
     }
 
-    Axios.post('http://localhost:8080/api/product', formData)
+    API.post('/api/product', formData)
       .then((response) => {
         console.log('Product added successfully:', response.data);
         window.alert('Product added successfully!');

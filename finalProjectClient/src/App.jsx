@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
+import API from './api';
 import MyStorage from './components/MyStorage';
 import MyMenuBar from './components/MyMenuBar';
 import Login from './components/Auth';
@@ -32,7 +33,7 @@ function App() {
   }, []);
 
   const getUser = () => {
-    Axios.get('http://localhost:8080/api/auth/Test1/12345')
+    API.get('/api/auth/Test1/12345')
       .then((response) => {
         console.log('User data received:', response.data.data[0][0]);
         const user = response.data.data[0][0].Username;

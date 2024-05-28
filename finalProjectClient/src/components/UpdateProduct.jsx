@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
+import API from './api';
 
 const UpdateProduct = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -24,7 +25,7 @@ const UpdateProduct = () => {
   }, [storedUID]);
 
   const getProductUser = (UID) => {
-    Axios.get(`http://localhost:8080/api/product/User/${UID}`)
+    API.get(`/api/product/User/${UID}`)
       .then((response) => {
         setProductList(response.data.data[0]);
       })
@@ -50,7 +51,7 @@ const UpdateProduct = () => {
       formData.append(key, productDetails[key]);
     }
 
-    Axios.put(`http://localhost:8080/api/product/${productDetails.ProductID}`, formData)
+    API.put(`/api/product/${productDetails.ProductID}`, formData)
       .then((response) => {
         console.log('Product update successfully:', response.data);
         window.alert('Product updated successfully!');

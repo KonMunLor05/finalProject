@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import NotHaveImage from './image/notHave.png';
+import API from './api';
 
 function OwnerStore({ setActiveDetail }) {
   const [productList, setProductList] = useState([]);
@@ -11,7 +12,7 @@ function OwnerStore({ setActiveDetail }) {
   }, []);
 
   const getProductUser = (UID) => {
-    Axios.get(`http://localhost:8080/api/product/User/${UID}`)
+    API.get(`/api/product/User/${UID}`)
       .then((response) => {
         setProductList(response.data.data[0]);
       })

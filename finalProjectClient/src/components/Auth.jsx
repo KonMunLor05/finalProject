@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
+import API from './api';
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -7,7 +8,7 @@ const Login = ({ onLogin }) => {
   const [error, setError] = useState('');
 
   const handleLogin = () => {
-    Axios.get(`http://localhost:8080/api/auth/${username}/${password}`)
+    API.get(`/api/auth/${username}/${password}`)
       .then((response) => {
         const user = response.data.data[0][0].Username;
         sessionStorage.setItem('username', user);

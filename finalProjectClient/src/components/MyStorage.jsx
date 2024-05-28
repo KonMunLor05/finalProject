@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import NotHaveImage from './image/notHave.png';
+import API from './api';
 
 function MyStorage({ setActiveDetail }) {
   const [productList, setProductList] = useState([]);
@@ -10,7 +11,7 @@ function MyStorage({ setActiveDetail }) {
   }, []);
 
   const getProduct = () => {
-    Axios.get('http://localhost:8080/api/product')
+    API.get('/api/product')
       .then((response) => {
         setProductList(response.data.data[0]);
       })

@@ -41,3 +41,9 @@ sudo yum install -y nginx
 
 sudo systemctl start nginx
 sudo systemctl enable nginx
+
+#มีแก้ก่แนหน้าอัดคลิป
+#sudo chmod -R 755 /home/ec2-user
+#sudo npm install ใน finalProjectClient
+#sudo npm run build ใน finalProjectClient
+#sudo nano /etc/nginx/nginx.conf แก้ config ให้มาที่ /home/ec2-user/finalProject/finalProjectClient/dist
